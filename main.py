@@ -1,6 +1,8 @@
-import uvicorn
+from pprint import pprint
 
-from src.di import container_general, dao_container
+import uvicorn
+import asyncio
+from src.di import container_general, dao_container, container_parser
 
 db = dao_container.db
 
@@ -15,9 +17,10 @@ pylounge = {
 
 if __name__ == '__main__':
     # collection.drop()
-    ins_result = collection.insert_one(pylounge)
-    print(ins_result.inserted_id)
-    print(collection.count_documents({}))
+    # ins_result = collection.insert_one(pylounge)
+    # print(ins_result.inserted_id)
+    # print(collection.count_documents({}))
+    pprint(asyncio.run(container_parser.lamoda.get_all_data()))
     uvicorn.run(
         container_general.app,
         host=container_general.config.service.host,
