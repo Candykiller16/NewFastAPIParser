@@ -24,3 +24,22 @@ class Sneakers(BaseModel):
                 'price': '399.00'
             }
         }
+
+
+class SneakersResponse(BaseModel):
+    sneakers: List[Sneakers]
+
+
+class SneakersCreateUpdate(BaseModel):
+    brand: Optional[str]
+    name: Optional[str]
+    price: Optional[str]
+
+    class Config:
+        schema_extra = {
+            'example': {
+                'brand': 'Кроссовки Pacer Next SB WTR',
+                'name': 'PUMA',
+                'price': '349.00'
+            }
+        }

@@ -31,7 +31,7 @@ if __name__ == '__main__':
     # for page in data:
     #     container_controller.lamoda.create_list(page)
     # print(container_controller.lamoda.get_list())
-
+    container_controller.lamoda.collection.drop()
     uvicorn.run(
         container_general.app,
         host=container_general.config.service.host,
