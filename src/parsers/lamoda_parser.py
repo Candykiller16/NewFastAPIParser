@@ -17,7 +17,7 @@ class LamodaParser:
     async def parse_shoes(self, url, page):
         man_shoes_list = []
         async with httpx.AsyncClient(timeout=None) as client:
-            completed_url = f'{url}?page={page}'
+            completed_url = f'{url}&page={page}'
             response = await client.get(completed_url)
 
             if response.status_code == 200:
@@ -50,6 +50,6 @@ class LamodaParser:
 
     async def get_all_data(self):
         collected_data = []
-        for page in range(1, 26):
+        for page in range(1, 28):
             collected_data.append(self.parse_shoes(self.url, page))
         return await asyncio.gather(*collected_data)
