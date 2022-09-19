@@ -10,3 +10,12 @@ class LamodaController:
     # CRUD operations for LamodaController to call them from ContainerController
     def create_list(self, product_list: list):
         return self.collection.insert_many(product_list)
+
+    def get_list(self):
+        data_list = []
+
+        for data in self.collection.find():
+            data['_id'] = str(data['_id'])
+            data_list.append(data)
+
+        return data_list
