@@ -2,11 +2,11 @@ from pprint import pprint
 
 import uvicorn
 import asyncio
-from src.di import container_general, dao_container, container_parser
+from src.di import container_general, dao_container, container_parser, container_controller
 
-db = dao_container.db
-
-collection = db.lamoda
+# db = dao_container.db
+#
+# collection = db.lamoda
 
 pylounge = {
     'title': "PyLounge",
@@ -20,7 +20,11 @@ if __name__ == '__main__':
     # ins_result = collection.insert_one(pylounge)
     # print(ins_result.inserted_id)
     # print(collection.count_documents({}))
-    pprint(asyncio.run(container_parser.lamoda.get_all_data()))
+    # pprint(asyncio.run(container_parser.lamoda.get_all_data()))
+
+    container_controller.lamoda.collection.drop()
+    # container_controller.lamoda.collection.insert_one(pylounge)
+    print(container_controller.lamoda.collection.count_documents({}))
     uvicorn.run(
         container_general.app,
         host=container_general.config.service.host,
