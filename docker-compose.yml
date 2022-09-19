@@ -1,0 +1,13 @@
+version: "3.3"
+
+services:
+  app:
+    build: .
+    command: python main.py
+    volumes:
+      - .:/parsing/
+    ports:
+      - "8000:8000"
+    environment:
+      FASTAPI_SERVICE_CONTAINER_HOST: 0.0.0.0
+      FASTAPI_SERVICE_CONTAINER_PORT: 8000
