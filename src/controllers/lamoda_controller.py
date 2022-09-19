@@ -28,10 +28,26 @@ class LamodaController:
     def get_list(self) -> SneakersResponse:
         return SneakersResponse(sneakers=list(self.collection.find()))
 
-    def get(self, _id: str) -> Sneakers:
+    def get_one(self, _id: str) -> Sneakers:
         data = self.collection.find_one({'_id': ObjectId(_id)})
         if data is not None:
             data['_id'] = str(data['_id'])
             return data
+        else:
+            raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f'Sneaker with ID {_id} not found')
+
+    def update_one(self, _id, sneaker: SneakersCreateUpdate = Body(...)):
+        data = self.collection.find_one({'_id': ObjectId(_id)})
+        if data is not None:
+            self.collection.update_one({'_id': ObjectId(_id)}, {'$set': sneaker.dict()})
+            return {'_id': _id, **sneaker.dict()}
+        else:
+            raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f'Sneaker with ID {_id} not found')
+
+    def delete_one(self, _id):
+        data = self.collection.find_one({'_id': ObjectId(_id)})
+        if data is not None:
+            self.collection.delete_one({'_id': ObjectId(_id)})
+            return {"message": f"Sneaker with ID {_id} was deleted"}
         else:
             raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f'Sneaker with ID {_id} not found')
