@@ -3,10 +3,12 @@ import asyncio
 import uvicorn
 
 from src.di import container_general, container_parser, container_controller
-
+from src.routers.lamoda import router as lamoda_router
 # db = dao_container.db
 #
 # collection = db.lamoda
+
+container_general.app.include_router(lamoda_router)
 
 if __name__ == '__main__':
     # collection.drop()
@@ -28,7 +30,7 @@ if __name__ == '__main__':
     # data = asyncio.run(container_parser.lamoda.get_all_data())
     # for page in data:
     #     container_controller.lamoda.create_list(page)
-    print(container_controller.lamoda.get_list())
+    # print(container_controller.lamoda.get_list())
 
     uvicorn.run(
         container_general.app,

@@ -1,3 +1,6 @@
+from bson import ObjectId
+
+
 class LamodaController:
     def __init__(self, db):
         self._db = db
@@ -19,3 +22,8 @@ class LamodaController:
             data_list.append(data)
 
         return data_list
+
+    def get(self, _id: str):
+        data = self.collection.find_one({'_id': ObjectId(_id)})
+        data['_id'] = str(data['_id'])
+        return data
