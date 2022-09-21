@@ -39,7 +39,8 @@ if __name__ == '__main__':
     # container_controller.lamoda.collection.drop()
     # print(container_controller.lamoda.collection.count_documents({})) # 0
     uvicorn.run(
-        container_general.app,
+        "src.di:container_general.app",
         host=container_general.config.service.host,
         port=container_general.config.service.port,
+        reload=True,
     )
