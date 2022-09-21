@@ -14,7 +14,6 @@ class LamodaController:
     def count_documents(self):
         return self._db.count_documents()
 
-
     # CRUD operations for LamodaController to call them from ContainerController
     def get_sneakers(self):
         return self._db.get_sneakers()

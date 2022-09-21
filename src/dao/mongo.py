@@ -6,11 +6,14 @@ from starlette.exceptions import HTTPException
 from starlette.status import HTTP_404_NOT_FOUND
 
 from src.models.lamoda.sneakers import SneakersCreateUpdate, SneakersResponse, Sneakers
+from src.models.twitch.streams import Streams, StreamsCreateUpdate, StreamsResponse
 
 
 class Mongo:
     def __init__(self, db):
         self.__db = db
+
+    # For Lamoda_parser methods
 
     def drop_collection(self):
         return self.__db.db.lamoda.drop()
@@ -51,3 +54,17 @@ class Mongo:
             return {"message": f"Sneaker with ID {_id} was deleted"}
         else:
             raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f'Sneaker with ID {_id} not found')
+
+    # For Twich_parser methods
+
+    def drop_twich_collection(self):
+        return self.__db.db.twitch.drop()
+
+    def count_twitch_documents(self):
+        return self.__db.db.twitch.count_documents({})
+
+    def insert_streams(self, streams):
+        return self.__db.db.twitch.insert_many(streams)
+
+    def get_streams(self) -> StreamsResponse:
+        return StreamsResponse(streams=list(self.__db.db.twitch.find()))

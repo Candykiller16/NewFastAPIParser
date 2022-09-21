@@ -1,14 +1,18 @@
 import asyncio
+from pprint import pprint
 
 import uvicorn
 
 from src.di import container_general, container_parser, container_controller
 from src.routers.lamoda import router as lamoda_router
+from src.routers.twitch import router as twitch_router
+
 # db = dao_container.db
 #
 # collection = db.lamoda
 
 container_general.app.include_router(lamoda_router)
+container_general.app.include_router(twitch_router)
 
 if __name__ == '__main__':
     # collection.drop()
@@ -31,13 +35,21 @@ if __name__ == '__main__':
     # for page in data:
     #     container_controller.lamoda.create_list(page)
     # print(container_controller.lamoda.get_list())
-    container_controller.lamoda.drop_collection()
-    data = asyncio.run(container_parser.lamoda.get_all_data())
-    for page in data:
-        container_controller.lamoda.insert_sneaker_to_mongo(page)
-    print(container_controller.lamoda.count_documents()) # 1566
+
     # container_controller.lamoda.collection.drop()
     # print(container_controller.lamoda.collection.count_documents({})) # 0
+
+    # container_controller.lamoda.drop_collection()
+    # data = asyncio.run(container_parser.lamoda.get_all_data())
+    # for page in data:
+    #     container_controller.lamoda.insert_sneaker_to_mongo(page)
+    # print(container_controller.lamoda.count_documents())  # 1566
+
+    # data = container_parser.twitch.get_data_from_twich_api()
+    # container_controller.twitch.insert_streams_to_mongo(data)
+    # print(container_controller.twitch.count_documents())
+    # print(container_controller.twitch.get_streams())
+
     uvicorn.run(
         "src.di:container_general.app",
         host=container_general.config.service.host,
