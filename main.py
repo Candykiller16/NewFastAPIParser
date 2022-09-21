@@ -31,11 +31,11 @@ if __name__ == '__main__':
     # for page in data:
     #     container_controller.lamoda.create_list(page)
     # print(container_controller.lamoda.get_list())
-    container_controller.lamoda.collection.drop()
+    container_controller.lamoda.drop_collection()
     data = asyncio.run(container_parser.lamoda.get_all_data())
     for page in data:
-        container_controller.lamoda.create_list(page)
-    print(container_controller.lamoda.collection.count_documents({})) # 1566
+        container_controller.lamoda.insert_sneaker_to_mongo(page)
+    print(container_controller.lamoda.count_documents()) # 1566
     # container_controller.lamoda.collection.drop()
     # print(container_controller.lamoda.collection.count_documents({})) # 0
     uvicorn.run(

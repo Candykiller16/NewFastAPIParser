@@ -6,5 +6,5 @@ class ContainerController:
         self._lamoda = LamodaController(db)
 
     @property
-    def lamoda(self):
+    def lamoda(self) -> LamodaController:
         return self._lamoda

@@ -1,53 +1,32 @@
-from typing import Dict
-
-from bson import ObjectId
-from fastapi import Body
-from starlette.exceptions import HTTPException
-from starlette.status import HTTP_404_NOT_FOUND
-
-from src.models.lamoda.sneakers import SneakersCreateUpdate, Sneakers, SneakersResponse
+from src.dao.mongo import Mongo
 
 
 class LamodaController:
-    def __init__(self, db):
+    def __init__(self, db: Mongo):
         self._db = db
-        self._collection = db.lamoda
 
-    @property
-    def collection(self):
-        return self._collection
+    def drop_collection(self):
+        return self._db.drop_collection()
+
+    def insert_sneaker_to_mongo(self, sneakers):
+        return self._db.insert_sneakers(sneakers)
+
+    def count_documents(self):
+        return self._db.count_documents()
+
 
     # CRUD operations for LamodaController to call them from ContainerController
-    def create_list(self, product_list: list):
-        return self.collection.insert_many(product_list)
+    def get_sneakers(self):
+        return self._db.get_sneakers()
 
-    def create(self, sneaker: SneakersCreateUpdate = Body(...)) -> Dict[str, str]:
-        new_shoe = self.collection.insert_one(sneaker.dict())
-        return {"_id": str(new_shoe.inserted_id), **sneaker.dict()}
+    def get_sneaker_by_id(self, _id):
+        return self._db.get_one(_id)
 
-    def get_list(self) -> SneakersResponse:
-        return SneakersResponse(sneakers=list(self.collection.find()))
+    def create_sneaker(self):
+        return self._db.create()
 
-    def get_one(self, _id: str) -> Sneakers:
-        data = self.collection.find_one({'_id': ObjectId(_id)})
-        if data is not None:
-            data['_id'] = str(data['_id'])
-            return data
-        else:
-            raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f'Sneaker with ID {_id} not found')
+    def update_sneaker(self, _id):
+        return self._db.update_one(_id)
 
-    def update_one(self, _id, sneaker: SneakersCreateUpdate = Body(...)):
-        data = self.collection.find_one({'_id': ObjectId(_id)})
-        if data is not None:
-            self.collection.update_one({'_id': ObjectId(_id)}, {'$set': sneaker.dict()})
-            return {'_id': _id, **sneaker.dict()}
-        else:
-            raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f'Sneaker with ID {_id} not found')
-
-    def delete_one(self, _id):
-        data = self.collection.find_one({'_id': ObjectId(_id)})
-        if data is not None:
-            self.collection.delete_one({'_id': ObjectId(_id)})
-            return {"message": f"Sneaker with ID {_id} was deleted"}
-        else:
-            raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f'Sneaker with ID {_id} not found')
+    def delete_sneaker(self, _id):
+        return self._db.delete_one(_id)

@@ -7,5 +7,5 @@ container_general = ContainerGeneral()
 dao_container = ContainerDAO(container_general)
 container_parser = ContainerParser(container_general)
 container_controller = ContainerController(
-    db=dao_container.db
+    db=dao_container.mongo_source
 )
