@@ -44,6 +44,7 @@ class StreamsCreateUpdate(BaseModel):
 
     game_name: Optional[str]
     language: Optional[str]
+    started_at: Optional[str]
     title: Optional[str]
     user_login: Optional[str]
     user_name: Optional[str]
@@ -55,9 +56,11 @@ class StreamsCreateUpdate(BaseModel):
             'example': {
                 'game_name': 'Elden Ring',
                 'language': 'en',
+                "started_at": "2022-09-23T08:19:30Z",
                 'title': 'I sucked and I was fucked',
                 'type': 'live',
                 'user_login': 'general_radan',
                 'user_name': 'MARIKA_IS_WAIFU',
-                'viewer_count': 169878}
+                'viewer_count': 169878
+            }
         }

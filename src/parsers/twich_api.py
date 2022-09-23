@@ -1,7 +1,4 @@
 import requests
-
-from src.dao.kafka import Kafka
-from src.dao.mongo import Mongo
 from src.di.container_general import ContainerGeneral
 
 

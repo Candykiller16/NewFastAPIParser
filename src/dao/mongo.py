@@ -60,11 +60,42 @@ class Mongo:
     def drop_twich_collection(self):
         return self.__db.db.twitch.drop()
 
+    def list_of_collections(self):
+        return self.__db.db.list_collection_names()
+
     def count_twitch_documents(self):
         return self.__db.db.twitch.count_documents({})
 
     def insert_streams(self, streams):
-        return self.__db.db.twitch.insert_one(streams)
+        return self.__db.db.twitch.insert_many(streams)
 
     def get_streams(self) -> StreamsResponse:
         return StreamsResponse(streams=list(self.__db.db.twitch.find()))
+
+    def create_stream(self, stream: StreamsCreateUpdate = Body(...)) -> Dict[str, str]:
+        new_shoe = self.__db.db.twitch.insert_one(stream.dict())
+        return {"_id": str(new_shoe.inserted_id), **stream.dict()}
+
+    def get_one_stream(self, _id: str) -> Streams:
+        data = self.__db.db.twitch.find_one({'_id': ObjectId(_id)})
+        if data is not None:
+            data['_id'] = str(data['_id'])
+            return data
+        else:
+            raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f'Stream with ID {_id} not found')
+
+    def update_one_stream(self, _id, stream: StreamsCreateUpdate = Body(...)):
+        data = self.__db.db.twitch.find_one({'_id': ObjectId(_id)})
+        if data is not None:
+            self.__db.db.twitch.update_one({'_id': ObjectId(_id)}, {'$set': stream.dict()})
+            return {'_id': _id, **stream.dict()}
+        else:
+            raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f'Stream with ID {_id} not found')
+
+    def delete_one_stream(self, _id):
+        data = self.__db.db.twitch.find_one({'_id': ObjectId(_id)})
+        if data is not None:
+            self.__db.db.twitch.delete_one({'_id': ObjectId(_id)})
+            return {"message": f"Stream with ID {_id} was deleted"}
+        else:
+            raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail=f'Stream with ID {_id} not found')
