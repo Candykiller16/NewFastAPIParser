@@ -10,6 +10,7 @@ httpcore==0.15.0
 httptools==0.5.0
 httpx==0.23.0
 idna==3.4
+kafka-python==2.0.2
 mccabe==0.7.0
 pycodestyle==2.9.1
 pydantic==1.10.2

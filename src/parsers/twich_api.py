@@ -1,5 +1,7 @@
 import requests
 
+from src.dao.kafka import Kafka
+from src.dao.mongo import Mongo
 from src.di.container_general import ContainerGeneral
 
 
@@ -39,3 +41,12 @@ class TwitchParser:
             }
             list_of_stream_data.append(data_from_stream)
         return list_of_stream_data
+
+    # async def parse(self):
+    #
+    #     data = self.get_data_from_twich_api()
+    #     for stream in data:
+    #         self.kafka.producer.send("topic_twitch", value=stream)
+    #         print(f"send {stream}")
+    #
+    #     await self.mongo.insert_streams(self.kafka.consumer_twitch)

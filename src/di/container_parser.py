@@ -1,3 +1,5 @@
+from src.dao.kafka import Kafka
+from src.dao.mongo import Mongo
 from src.di.container_general import ContainerGeneral
 from src.parsers.lamoda_parser import LamodaParser
 from src.parsers.twich_api import TwitchParser

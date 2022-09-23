@@ -64,7 +64,7 @@ class Mongo:
         return self.__db.db.twitch.count_documents({})
 
     def insert_streams(self, streams):
-        return self.__db.db.twitch.insert_many(streams)
+        return self.__db.db.twitch.insert_one(streams)
 
     def get_streams(self) -> StreamsResponse:
         return StreamsResponse(streams=list(self.__db.db.twitch.find()))

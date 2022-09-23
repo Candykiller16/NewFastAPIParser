@@ -25,6 +25,16 @@ class MongoDB(BaseSettings):
         env_file_encoding = 'utf-8'
 
 
+class Kafka(BaseSettings):
+    host: str
+    port: int
+
+    class Config:
+        env_prefix = _CONFIG_PREFIX + 'KAFKA_'
+        env_file = '.env'
+        env_file_encoding = 'utf-8'
+
+
 class LamodaUrl(BaseSettings):
     sneakers_url = "https://www.lamoda.by/c/5971/shoes-muzhkrossovki/?sitelink=topmenuM&l=5"
 
@@ -47,6 +57,7 @@ class Twitch(BaseSettings):
 class Config(BaseSettings):
     service: Service = Service()
     mongodb: MongoDB = MongoDB()
+    kafka: Kafka = Kafka()
     lamoda_url: LamodaUrl = LamodaUrl()
     twitch: Twitch = Twitch()
 

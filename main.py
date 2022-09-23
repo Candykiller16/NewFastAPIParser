@@ -1,7 +1,7 @@
-import asyncio
-from pprint import pprint
+from json import dumps, loads
 
 import uvicorn
+from kafka import KafkaProducer, KafkaConsumer
 
 from src.di import container_general, container_parser, container_controller
 from src.routers.lamoda import router as lamoda_router
@@ -49,7 +49,34 @@ if __name__ == '__main__':
     # container_controller.twitch.insert_streams_to_mongo(data)
     # print(container_controller.twitch.count_documents())
     # print(container_controller.twitch.get_streams())
+    producer = KafkaProducer(
+        retries=5,
+        api_version=(0, 11, 5),
+        bootstrap_servers=["kafka:9092"],
+        value_serializer=lambda x: dumps(x).encode("utf-8"),
+    )
+    consumer = KafkaConsumer(
+        "topictwitch",
+        api_version=(0, 11, 5),
+        bootstrap_servers=["kafka:9092"],
+        auto_offset_reset="earliest",
+        enable_auto_commit=True,
+        consumer_timeout_ms=2000,
+        heartbeat_interval_ms=200,
+        group_id="1",
+        value_deserializer=lambda x: loads(x.decode("utf-8")),
+    )
+    consumer.subscribe(topics=["topictwitch"])
+    data = container_parser.twitch.get_data_from_twich_api()
+    for stream_data in data:
+        producer.send("topictwitch", value=stream_data)
+        print(f"{type(stream_data)} products inserted!")
+    print("Items send")
 
+    for message in consumer:
+        print(message.value)
+
+    print(container_controller.twitch.count_documents())
     uvicorn.run(
         "src.di:container_general.app",
         host=container_general.config.service.host,
