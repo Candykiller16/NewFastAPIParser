@@ -9,6 +9,8 @@ flake8 = "*"
 pymongo = "*"
 beautifulsoup4 = "*"
 httpx = "*"
+requests = "*"
+kafka-python = "*"
 
 [dev-packages]
 

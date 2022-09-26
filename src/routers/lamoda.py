@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Body
 
 from src.di import container_controller
 from src.models.lamoda.sneakers import Sneakers, SneakersCreateUpdate, SneakersResponse
@@ -22,7 +22,7 @@ def get_sneaker(_id: str) -> Sneakers:
 
 
 @router.post('/create', description="Create one sneaker")
-def create_sneaker(sneaker: SneakersCreateUpdate) -> Dict[str, str]:
+def create_sneaker(sneaker: SneakersCreateUpdate = Body(...)) -> Sneakers:
     return container_controller.lamoda.create_sneaker(sneaker)
 
 
